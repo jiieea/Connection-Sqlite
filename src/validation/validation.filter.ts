@@ -1,7 +1,8 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, Global } from '@nestjs/common';
 import { Response } from 'express';
 import { ZodError } from 'zod';
 
+@Global()
 @Catch(ZodError)
 export class ValidationFilter implements ExceptionFilter<ZodError> {
   catch(exception: ZodError, host: ArgumentsHost) {

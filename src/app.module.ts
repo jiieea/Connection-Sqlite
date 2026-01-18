@@ -14,6 +14,7 @@ import { ValidateModule } from './validate/validate.module';
 import { Email } from './user/email/email';
 import * as winston from 'winston';
 import { LogMiddleware } from './log/log.middleware';
+import { AuthMiddleware } from './auth/auth.middleware';
 
 @Module({
   imports: [
@@ -36,6 +37,10 @@ export class AppModule implements NestModule {
     consumer.apply(LogMiddleware).forRoutes({
       path: '/*',
       method: RequestMethod.ALL,
+    });
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: '/current',
+      method: RequestMethod.GET,
     });
   }
 }

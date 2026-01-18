@@ -11,4 +11,10 @@ export class Email {
     this.validationService.validate(emailSchema, email);
     return `Email sent to ${email}`;
   }
+
+  getName(name: string): string {
+    const nameSchema = z.string().min(3);
+    this.validationService.validate(nameSchema, name);
+    return `Hello ${name}`;
+  }
 }
