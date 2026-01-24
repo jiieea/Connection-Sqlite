@@ -21,7 +21,9 @@ import { TimeInterceptor } from './time/time.interceptor';
 import { Auth } from './auth/auth.decorator';
 import * as client from 'generated/prisma/client';
 import { RoleGuard } from './role/role.guard';
+import { Roles } from './roles/roles.decorator';
 
+@UseGuards(RoleGuard)
 @Controller()
 export class AppController {
   constructor(
@@ -31,7 +33,7 @@ export class AppController {
   ) {}
 
   @Get('/system')
-  @UseGuards(new RoleGuard(['Quality Assurance', 'Developer']))
+  @Roles(['Developer'])
   enter(@Auth() user: client.User): Record<string, any> {
     return {
       data: `Welcome aboard ${user.name}`,
@@ -39,7 +41,7 @@ export class AppController {
   }
 
   @Get('/current')
-  @UseGuards(new RoleGuard(['Quality Assurance', 'Developer']))
+  @Roles(['User', 'Developer'])
   current(@Auth() user: client.User): Record<string, any> {
     return {
       data: `Credential received = ${user.name} for ${user.email}`,

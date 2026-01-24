@@ -3,6 +3,7 @@ import {
   Module,
   NestModule,
   RequestMethod,
+  UseGuards,
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -15,6 +16,7 @@ import { Email } from './user/email/email';
 import * as winston from 'winston';
 import { LogMiddleware } from './log/log.middleware';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { RoleGuard } from './role/role.guard';
 
 @Module({
   imports: [
@@ -29,7 +31,16 @@ import { AuthMiddleware } from './auth/auth.middleware';
     ValidateModule.forRoot(true),
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, UserService, Email],
+  providers: [
+    AppService,
+    {
+      provide: UseGuards,
+      useClass: RoleGuard,
+    },
+    PrismaService,
+    UserService,
+    Email,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
